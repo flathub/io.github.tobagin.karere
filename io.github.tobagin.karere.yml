@@ -46,4 +46,4 @@ modules:
       - type: git
         url: https://github.com/tobagin/karere.git
         tag: v0.4.6
-        commit: 3d25803fdea498c2b739a05c636d963c907d2814
+        commit: 3346b78827ec2f79bdcb3704d7b5d3124519b2ff
