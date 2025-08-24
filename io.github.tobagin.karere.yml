@@ -20,10 +20,6 @@ finish-args:
   - --filesystem=xdg-download
     # Desktop notifications
   - --talk-name=org.freedesktop.Notifications
-  # Enable spell checking support
-  - --talk-name=org.freedesktop.portal.SpellCheck
-  # Temporary file access for media downloads
-  - --filesystem=/tmp
 
 cleanup:
   - /include
