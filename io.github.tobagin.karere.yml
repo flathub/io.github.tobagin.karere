@@ -5,45 +5,77 @@ sdk: org.gnome.Sdk
 command: karere
 
 finish-args:
-  # X11 and IPC access
-  - --share=ipc
-  - --socket=fallback-x11
-  # Wayland access
-  - --socket=wayland
-  # GPU acceleration if needed
-  - --device=dri
-  # Needs to talk to the network:
+  # Network access for WhatsApp Web
   - --share=network
-  # PulseAudio
+  # IPC access for desktop integration
+  - --share=ipc
+  # Wayland socket for modern display server
+  - --socket=wayland
+  # X11 fallback for compatibility
+  - --socket=fallback-x11
+  # Audio for notification sounds and media
   - --socket=pulseaudio
-  # File system access for downloads
+  # Desktop notifications
+  - --talk-name=org.freedesktop.Notifications
+  # Access to user downloads for file sharing
   - --filesystem=xdg-download
+  # Hardware acceleration
+  - --device=dri
+
+add-extensions:
+  org.freedesktop.Platform.ffmpeg-full:
+    directory: lib/ffmpeg
+    version: '24.08'
+    add-ld-path: .
+
+cleanup-commands:
+  - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
 
 cleanup:
   - /include
   - /lib/pkgconfig
+  - /lib/cmake
   - /man
   - /share/doc
   - /share/gtk-doc
   - /share/man
   - /share/pkgconfig
-  - "*.la"
-  - "*.a"
+  - /share/vala
+  - /share/aclocal
+  - /share/devhelp
+  - '*.la'
+  - '*.a'
 
 modules:
   - name: blueprint-compiler
     buildsystem: meson
-    cleanup: "*"
+    cleanup:
+      - "*"
     sources:
       - type: git
         url: https://gitlab.gnome.org/jwestman/blueprint-compiler.git
         tag: v0.18.0
         commit: 07c9c9df9cd1b6b4454ecba21ee58211e9144a4b
 
+  - name: libgee
+    buildsystem: autotools
+    config-opts:
+      - --disable-introspection
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/libgee/0.20/libgee-0.20.8.tar.xz
+        sha256: 189815ac143d89867193b0c52b7dc31f3aa108a15f04d6b5dca2b6adfad0b0ee
+        x-checker-data:
+          type: gnome
+          name: libgee
+
   - name: karere
     buildsystem: meson
+    config-opts:
+      - -Dtests=false
+      - -Dprofile=default
     sources:
       - type: git
         url: https://github.com/tobagin/karere.git
-        tag: v0.4.6
-        commit: 6ea48bf8e9d599de2e5b024e1bf2c7317001f562
+        tag: v0.8.1
+        commit: 8769e2c9438f6e08d7f56d78c9ea2234008b84b6
