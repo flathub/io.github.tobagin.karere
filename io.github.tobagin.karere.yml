@@ -18,6 +18,12 @@ finish-args:
   - --socket=pulseaudio
   # File system access for downloads
   - --filesystem=xdg-download
+    # Desktop notifications
+  - --talk-name=org.freedesktop.Notifications
+  # Enable spell checking support
+  - --talk-name=org.freedesktop.portal.SpellCheck
+  # Temporary file access for media downloads
+  - --filesystem=/tmp
 
 cleanup:
   - /include
@@ -33,17 +39,31 @@ cleanup:
 modules:
   - name: blueprint-compiler
     buildsystem: meson
-    cleanup: "*"
     sources:
       - type: git
         url: https://gitlab.gnome.org/jwestman/blueprint-compiler.git
         tag: v0.18.0
         commit: 07c9c9df9cd1b6b4454ecba21ee58211e9144a4b
 
+  - name: libgee
+    buildsystem: autotools
+    config-opts:
+      - --disable-introspection
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/libgee/0.20/libgee-0.20.8.tar.xz
+        sha256: 189815ac143d89867193b0c52b7dc31f3aa108a15f04d6b5dca2b6adfad0b0ee
+        x-checker-data:
+          type: gnome
+          name: libgee
+
   - name: karere
     buildsystem: meson
+    config-opts:
+      - -Dtests=false
+      - -Dprofile=production
     sources:
       - type: git
         url: https://github.com/tobagin/karere.git
-        tag: v0.4.6
-        commit: 6ea48bf8e9d599de2e5b024e1bf2c7317001f562
+        tag: v0.8.1
+        commit: 1e92b4c1410feb4f3618bb6c2cc42042e37da0a7
