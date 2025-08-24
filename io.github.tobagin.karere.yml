@@ -22,6 +22,15 @@ finish-args:
   # Hardware acceleration
   - --device=dri
 
+add-extensions:
+  org.freedesktop.Platform.ffmpeg-full:
+    directory: lib/ffmpeg
+    version: '24.08'
+    add-ld-path: .
+
+cleanup-commands:
+  - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
+
 cleanup:
   - /include
   - /lib/pkgconfig
@@ -40,10 +49,11 @@ cleanup:
 modules:
   - name: blueprint-compiler
     buildsystem: meson
+    cleanup:
+      - "*"
     sources:
       - type: git
         url: https://gitlab.gnome.org/jwestman/blueprint-compiler.git
-        cleanup: "*"
         tag: v0.18.0
         commit: 07c9c9df9cd1b6b4454ecba21ee58211e9144a4b
 
