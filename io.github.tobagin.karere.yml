@@ -53,7 +53,7 @@ modules:
       - "*"
     sources:
       - type: git
-        url: https://gitlab.gnome.org/jwestman/blueprint-compiler.git
+        url: https://gitlab.gnome.org/GNOME/blueprint-compiler.git
         tag: v0.18.0
         commit: 07c9c9df9cd1b6b4454ecba21ee58211e9144a4b
 
@@ -77,5 +77,5 @@ modules:
     sources:
       - type: git
         url: https://github.com/tobagin/karere.git
-        tag: v0.8.4
-        commit: 4a732407edd4b3bb9dcd9b3430c7a9b9313d973b
+        tag: v0.9.2
+        commit: 7f9c1b7d1b49b0313b2b92c978baea292747f0b9
