@@ -50,7 +50,7 @@ modules:
   - name: blueprint-compiler
     buildsystem: meson
     cleanup:
-      - "*"
+      - '*'
     sources:
       - type: git
         url: https://gitlab.gnome.org/GNOME/blueprint-compiler.git
@@ -78,4 +78,4 @@ modules:
       - type: git
         url: https://github.com/tobagin/karere.git
         tag: v0.9.3
-        commit: a159adc081c0112da7457249cadabee0418058f4
+        commit: 239d61a0cf1e1376340f651e4c88dceb5bb24d68
