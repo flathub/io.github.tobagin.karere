@@ -17,6 +17,8 @@ finish-args:
   - --socket=pulseaudio
   # Desktop notifications
   - --talk-name=org.freedesktop.Notifications
+  # Portal for opening external URIs
+  - --talk-name=org.freedesktop.portal.OpenURI
   # Access to user downloads for file sharing
   - --filesystem=xdg-download
   # Hardware acceleration
@@ -53,7 +55,7 @@ modules:
       - "*"
     sources:
       - type: git
-        url: https://gitlab.gnome.org/jwestman/blueprint-compiler.git
+        url: https://gitlab.gnome.org/GNOME/blueprint-compiler.git
         tag: v0.18.0
         commit: 07c9c9df9cd1b6b4454ecba21ee58211e9144a4b
 
@@ -77,5 +79,5 @@ modules:
     sources:
       - type: git
         url: https://github.com/tobagin/karere.git
-        tag: v0.8.4
-        commit: 4a732407edd4b3bb9dcd9b3430c7a9b9313d973b
+        tag: v0.9.3
+        commit: df97d5202a7d9929557d4283f4edad54dbdf942b
