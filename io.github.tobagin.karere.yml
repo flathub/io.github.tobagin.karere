@@ -1,6 +1,6 @@
 app-id: io.github.tobagin.karere
 runtime: org.gnome.Platform
-runtime-version: '48'
+runtime-version: '49'
 sdk: org.gnome.Sdk
 command: karere
 
@@ -50,7 +50,7 @@ modules:
   - name: blueprint-compiler
     buildsystem: meson
     cleanup:
-      - '*'
+      - "*"
     sources:
       - type: git
         url: https://gitlab.gnome.org/GNOME/blueprint-compiler.git
@@ -77,5 +77,5 @@ modules:
     sources:
       - type: git
         url: https://github.com/tobagin/karere.git
-        tag: v0.9.3
-        commit: 239d61a0cf1e1376340f651e4c88dceb5bb24d68
+        tag: v0.9.4
+        commit: c020b599da488202a48b937f0b00f72c25d0b1b3
