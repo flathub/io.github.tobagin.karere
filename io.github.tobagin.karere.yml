@@ -21,6 +21,8 @@ finish-args:
   - --filesystem=xdg-download
   # Hardware acceleration
   - --device=dri
+  # Configure WebKit spell checker dictionary paths (bundled and runtime)
+  - --env=WEBKIT_SPELL_CHECKER_DIR=/app/share/hunspell
 
 add-extensions:
   org.freedesktop.Platform.ffmpeg-full:
@@ -47,16 +49,6 @@ cleanup:
   - '*.a'
 
 modules:
-  - name: blueprint-compiler
-    buildsystem: meson
-    cleanup:
-      - "*"
-    sources:
-      - type: git
-        url: https://gitlab.gnome.org/GNOME/blueprint-compiler.git
-        tag: v0.18.0
-        commit: 07c9c9df9cd1b6b4454ecba21ee58211e9144a4b
-
   - name: libgee
     buildsystem: autotools
     config-opts:
@@ -69,6 +61,28 @@ modules:
           type: gnome
           name: libgee
 
+  - name: hunspell-dictionaries
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/share/hunspell
+      # Install all dictionaries from LibreOffice dictionaries repository
+      # This script finds all .dic and .aff files and copies them to /app/share/hunspell
+      - |
+        find . -type f \( -name "*.dic" -o -name "*.aff" \) ! -path "*/hyph_*" ! -path "*/.git/*" ! -path "*/util/*" | while read -r file; do
+          filename=$(basename "$file")
+          # Skip hyphenation dictionaries (hyph_*) - we only want spell checking dictionaries
+          if [[ ! "$filename" =~ ^hyph_ ]]; then
+            install -Dm644 "$file" "/app/share/hunspell/$filename"
+          fi
+        done
+      - echo "Installed $(ls -1 /app/share/hunspell/*.dic 2>/dev/null | wc -l) dictionaries"
+    sources:
+      # LibreOffice dictionaries - comprehensive set of hunspell dictionaries (all languages)
+      - type: archive
+        url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-25.2.7.1.zip
+        sha256: 4a01f3e0f1f0982ce4a77fa2dd1352a23b14693fe8ba151a42be5cc6e88dc949
+        dest-filename: libreoffice-dictionaries.zip
+
   - name: karere
     buildsystem: meson
     config-opts:
@@ -77,5 +91,5 @@ modules:
     sources:
       - type: git
         url: https://github.com/tobagin/karere.git
-        tag: v0.9.4
-        commit: c020b599da488202a48b937f0b00f72c25d0b1b3
+        tag: v1.0.0
+        commit: 3d185a0a86163d2cc766edf096683be68d49531e
