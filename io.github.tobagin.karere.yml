@@ -3,26 +3,24 @@ runtime: org.gnome.Platform
 runtime-version: '49'
 sdk: org.gnome.Sdk
 command: karere
-
 finish-args:
-  # Network access for WhatsApp Web
   - --share=network
-  # IPC access for desktop integration
   - --share=ipc
-  # Wayland socket for modern display server
-  - --socket=wayland
-  # X11 fallback for compatibility
   - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=org.freedesktop.Notifications
+  - --filesystem=xdg-download
+  - --filesystem=xdg-run/gvfsd
+  - --talk-name=org.gtk.vfs.*
   # Audio for notification sounds and media
   - --socket=pulseaudio
-  # Desktop notifications
-  - --talk-name=org.freedesktop.Notifications
-  # Access to user downloads for file sharing
-  - --filesystem=xdg-download
-  # Hardware acceleration
-  - --device=dri
   # Configure WebKit spell checker dictionary paths (bundled and runtime)
   - --env=WEBKIT_SPELL_CHECKER_DIR=/app/share/hunspell
+
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
 
 add-extensions:
   org.freedesktop.Platform.ffmpeg-full:
@@ -36,31 +34,18 @@ cleanup-commands:
 cleanup:
   - /include
   - /lib/pkgconfig
-  - /lib/cmake
   - /man
   - /share/doc
   - /share/gtk-doc
   - /share/man
   - /share/pkgconfig
-  - /share/vala
-  - /share/aclocal
-  - /share/devhelp
   - '*.la'
   - '*.a'
 
-modules:
-  - name: libgee
-    buildsystem: autotools
-    config-opts:
-      - --disable-introspection
-    sources:
-      - type: archive
-        url: https://download.gnome.org/sources/libgee/0.20/libgee-0.20.8.tar.xz
-        sha256: 189815ac143d89867193b0c52b7dc31f3aa108a15f04d6b5dca2b6adfad0b0ee
-        x-checker-data:
-          type: gnome
-          name: libgee
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
 
+modules:
   - name: hunspell-dictionaries
     buildsystem: simple
     build-commands:
@@ -77,19 +62,34 @@ modules:
         done
       - echo "Installed $(ls -1 /app/share/hunspell/*.dic 2>/dev/null | wc -l) dictionaries"
     sources:
-      # LibreOffice dictionaries - comprehensive set of hunspell dictionaries (all languages)
       - type: archive
-        url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-25.2.7.1.zip
-        sha256: 4a01f3e0f1f0982ce4a77fa2dd1352a23b14693fe8ba151a42be5cc6e88dc949
-        dest-filename: libreoffice-dictionaries.zip
+        url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-26.2.0.1.zip
+        sha256: e1ef5088fe903eac040b622df175b7a7230c4decfae9cc72c1a1377f0b9e7afd
 
   - name: karere
-    buildsystem: meson
-    config-opts:
-      - -Dtests=false
-      - -Dprofile=default
+    buildsystem: simple
+    build-options:
+      env:
+        CARGO_HOME: /run/build/karere/cargo
+    build-commands:
+      - cargo build --release
+      - install -Dm755 target/release/karere -t /app/bin/
+      - sed -i "s/@APP_ID@/io.github.tobagin.karere/g" data/io.github.tobagin.karere.desktop data/io.github.tobagin.karere.metainfo.xml
+      - sed -i "s/@APP_NAME@/Karere/g" data/io.github.tobagin.karere.desktop data/io.github.tobagin.karere.metainfo.xml
+      - install -Dm644 data/icons/hicolor/scalable/apps/io.github.tobagin.karere.svg -t /app/share/icons/hicolor/scalable/apps/
+      - install -Dm644 data/icons/hicolor/symbolic/apps/io.github.tobagin.karere-symbolic.svg -t /app/share/icons/hicolor/symbolic/apps/
+      - install -Dm644 data/icons/hicolor/symbolic/apps/io.github.tobagin.karere-new-message-symbolic.svg -t /app/share/icons/hicolor/symbolic/apps/
+      - install -Dm644 data/icons/hicolor/symbolic/apps/io.github.tobagin.karere-notification-symbolic.svg -t /app/share/icons/hicolor/symbolic/apps/
+      - install -Dm644 data/icons/hicolor/symbolic/apps/io.github.tobagin.karere-do-not-disturb-symbolic.svg -t /app/share/icons/hicolor/symbolic/apps/
+      - mkdir -p /app/share/sounds/karere
+      - install -Dm644 data/sounds/*.oga -t /app/share/sounds/karere/
+      - install -Dm644 data/io.github.tobagin.karere.gschema.xml -t /app/share/glib-2.0/schemas/
+      - install -Dm644 data/io.github.tobagin.karere.desktop -t /app/share/applications/
+      - install -Dm644 data/io.github.tobagin.karere.metainfo.xml -t /app/share/metainfo/
+      - glib-compile-schemas /app/share/glib-2.0/schemas
     sources:
       - type: git
-        url: https://github.com/tobagin/karere.git
-        tag: v1.1.1
-        commit: 079933d249d0940ee117c003e2b27c7c8da358f3
+        url: https://github.com/tobagin/karere
+        tag: v2.0.0
+        commit: 8b4ff14de3fb0fab55850251cf137e6cd5957974
+      - cargo-sources.json
