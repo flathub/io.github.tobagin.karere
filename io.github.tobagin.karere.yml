@@ -12,8 +12,6 @@ finish-args:
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=org.freedesktop.Notifications
   - --filesystem=xdg-download
-  - --filesystem=xdg-run/gvfsd
-  - --talk-name=org.gtk.vfs.*
   # Audio for notification sounds and media
   - --socket=pulseaudio
   # Configure WebKit spell checker dictionary paths (bundled and runtime)
@@ -66,6 +64,16 @@ modules:
         url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-26.2.0.1.zip
         sha256: e1ef5088fe903eac040b622df175b7a7230c4decfae9cc72c1a1377f0b9e7afd
 
+  - name: fonts-noto-color-emoji
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 NotoColorEmoji.ttf /app/share/fonts/NotoColorEmoji.ttf
+    sources:
+      - type: file
+        url: https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf
+        sha256: 72a635cb3d2f3524c51620cdde406b217204e8a6a06c6a096ff8ed4b5fd6e27b
+        dest-filename: NotoColorEmoji.ttf
+
   - name: karere
     buildsystem: simple
     build-options:
@@ -90,6 +98,6 @@ modules:
     sources:
       - type: git
         url: https://github.com/tobagin/karere
-        tag: v2.0.0
-        commit: deac68015fa9b8392fab09a0ae9156e54206d2cd
+        tag: v2.0.1
+        commit: 4cbf6837dd671b758f8f7ab179c8f782998eef96
       - cargo-sources.json
