@@ -13,6 +13,7 @@ finish-args:
 
   - --filesystem=xdg-download
   - --filesystem=xdg-run/pipewire-0
+
   # Audio for notification sounds and media
   - --socket=pulseaudio
   # Configure WebKit spell checker dictionary paths (bundled and runtime)
@@ -78,5 +79,5 @@ modules:
     sources:
       - type: git
         url: https://github.com/tobagin/karere
-        tag: v2.3.6
+        tag: v2.4.0
       - cargo-sources.json
