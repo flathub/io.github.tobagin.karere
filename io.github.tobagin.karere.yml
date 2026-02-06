@@ -79,5 +79,5 @@ modules:
     sources:
       - type: git
         url: https://github.com/tobagin/karere
-        tag: v2.4.0
+        tag: v2.4.1
       - cargo-sources.json
