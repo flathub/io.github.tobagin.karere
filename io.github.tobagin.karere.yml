@@ -25,26 +25,6 @@ finish-args:
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
 
-add-extensions:
-  org.freedesktop.Platform.ffmpeg-full:
-    directory: lib/ffmpeg
-    version: '25.08'
-    add-ld-path: .
-
-cleanup-commands:
-  - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
-
-cleanup:
-  - /include
-  - /lib/pkgconfig
-  - /man
-  - /share/doc
-  - /share/gtk-doc
-  - /share/man
-  - /share/pkgconfig
-  - '*.la'
-  - '*.a'
-
 build-options:
   append-path: /usr/lib/sdk/rust-stable/bin
   env:
