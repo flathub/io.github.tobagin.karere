@@ -25,6 +25,26 @@ finish-args:
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
 
+add-extensions:
+  org.freedesktop.Platform.ffmpeg-full:
+    directory: lib/ffmpeg
+    version: '25.08'
+    add-ld-path: .
+
+cleanup-commands:
+  - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /man
+  - /share/doc
+  - /share/gtk-doc
+  - /share/man
+  - /share/pkgconfig
+  - '*.la'
+  - '*.a'
+
 build-options:
   append-path: /usr/lib/sdk/rust-stable/bin
   env:
@@ -44,13 +64,13 @@ modules:
         done
     sources:
       - type: archive
-        url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-26.2.0.2.zip
-        sha256: 4b076ff20485af78036fc896804754c64f760b227aa692de84200f762ee471bc
+        url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-26.2.2.1.zip
+        sha256: d8cf2c47af3b64998f6a4f633136f7f41758abb5e5533821663c9dfdb80b9753
 
   - name: karere
     buildsystem: meson
     sources:
       - type: git
         url: https://github.com/tobagin/karere
-        tag: v2.5.5
+        tag: v2.0.9
       - cargo-sources.json
