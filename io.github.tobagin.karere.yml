@@ -55,8 +55,8 @@ modules:
         done
     sources:
       - type: archive
-        url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-26.2.0.2.zip
-        sha256: 4b076ff20485af78036fc896804754c64f760b227aa692de84200f762ee471bc
+        url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-26.2.2.2.zip
+        sha256: 1cae55732af02d542ea28300b958bb5724e9a60cdd1711523f2df858cd2beac2
 
   - name: karere
     buildsystem: meson
