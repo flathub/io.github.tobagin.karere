@@ -19,6 +19,8 @@ finish-args:
   - --socket=pulseaudio
   # Configure WebKit spell checker dictionary paths (bundled and runtime)
   - --env=WEBKIT_SPELL_CHECKER_DIR=/app/share/hunspell
+  # Enable SharedArrayBuffer without requiring cross-origin isolation headers
+  - --env=JSC_useSharedArrayBuffer=1
 
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -69,6 +71,26 @@ modules:
         sha256: 02e50da56419704883702048d008f591ee899c5bbf98f17e888fd911c1e83550
         only-arches: [aarch64]
 
+  # Pre-compiled gst-plugin-audiofx (gst-plugins-rs 0.14.4) built inside the
+  # GNOME Platform 50 SDK. Provides the audiornnoise GStreamer element required
+  # by WebKitGTK's WebRTC audio pipeline. Built by the build-gst-plugin-audiofx
+  # GitHub Actions workflow — see packaging/gst-plugin-audiofx-builder.yml.
+  - name: gst-plugin-audiofx
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 libgstrsaudiofx.so /app/lib/gstreamer-1.0/libgstrsaudiofx.so
+    sources:
+      - type: file
+        url: https://github.com/tobagin/karere/releases/download/gst-plugin-audiofx-0.14.4-gnome50/libgstrsaudiofx-x86_64.so
+        sha256: 1acb3fe0f4ef712d709d4c557dd9d2949ca3adb749f69c9c9414708e1a138d98
+        dest-filename: libgstrsaudiofx.so
+        only-arches: [x86_64]
+      - type: file
+        url: https://github.com/tobagin/karere/releases/download/gst-plugin-audiofx-0.14.4-gnome50/libgstrsaudiofx-aarch64.so
+        sha256: 8c199baa76e76fa8a28da0410672a097229de0757547fbd73b4f4136fe501774
+        dest-filename: libgstrsaudiofx.so
+        only-arches: [aarch64]
+
   - name: hunspell-dictionaries
     buildsystem: simple
     build-commands:
@@ -90,5 +112,6 @@ modules:
     sources:
       - type: git
         url: https://github.com/tobagin/karere
-        tag: v3.0.0
+        tag: v3.0.2
+        commit: 22c76ee8c8e1840699c03cde4f2467acf871b270
       - cargo-sources.json
