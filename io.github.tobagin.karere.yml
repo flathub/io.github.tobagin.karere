@@ -104,8 +104,8 @@ modules:
         done
     sources:
       - type: archive
-        url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-26.2.0.2.zip
-        sha256: 4b076ff20485af78036fc896804754c64f760b227aa692de84200f762ee471bc
+        url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-26.2.2.2.zip
+        sha256: 1cae55732af02d542ea28300b958bb5724e9a60cdd1711523f2df858cd2beac2
 
   - name: karere
     buildsystem: meson
@@ -113,5 +113,5 @@ modules:
       - type: git
         url: https://github.com/tobagin/karere
         tag: v3.0.2
-        commit: 22c76ee8c8e1840699c03cde4f2467acf871b270
+        commit: 80190c2bd087297b6c2912b63a93803af8804ec0
       - cargo-sources.json
