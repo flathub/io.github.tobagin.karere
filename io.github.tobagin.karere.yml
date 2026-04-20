@@ -21,6 +21,13 @@ finish-args:
   - --env=WEBKIT_SPELL_CHECKER_DIR=/app/share/hunspell
   # Enable SharedArrayBuffer without requiring cross-origin isolation headers
   - --env=JSC_useSharedArrayBuffer=1
+  # Disable WebKit's *inner* sandbox (the outer Flatpak sandbox still applies).
+  # Required on GNOME 50 / glibc 2.42+ where WebKit's bwrap launcher fails
+  # resolving /proc/self/fd/N for glibc's new anonymous memfd-backed ld-so-conf,
+  # causing "readPIDFromPeer: Unexpected short read from PID socket" crashes on
+  # launch. See #131. Remove once WebKitGTK's BubblewrapLauncher migrates all
+  # path-based binds to --bind-fd.
+  - --env=WEBKIT_DISABLE_SANDBOX_THIS_IS_DANGEROUS=1
 
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -104,8 +111,8 @@ modules:
         done
     sources:
       - type: archive
-        url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-26.2.0.2.zip
-        sha256: 4b076ff20485af78036fc896804754c64f760b227aa692de84200f762ee471bc
+        url: https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-26.2.3.1.zip
+        sha256: 75a4aa069eade717e5ce31c193ceeb6eb16cf4f76b2de02afd58324313b9c29e
 
   - name: karere
     buildsystem: meson
@@ -113,5 +120,5 @@ modules:
       - type: git
         url: https://github.com/tobagin/karere
         tag: v3.0.2
-        commit: 22c76ee8c8e1840699c03cde4f2467acf871b270
+        commit: 80190c2bd087297b6c2912b63a93803af8804ec0
       - cargo-sources.json
