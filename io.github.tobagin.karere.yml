@@ -91,6 +91,11 @@ modules:
       # Flathub pulls the tagged GitHub source. Update tag + commit per beta.
       - type: git
         url: https://github.com/tobagin/karere
-        tag: v4.0.0-beta2
-        commit: ea6de8935fdf6225cfe875f2be593112c21a1981
+        tag: v4.0.0-beta3
+        commit: d23843fb63652d4f03b7f5a81b67412fa39a7045
       - cargo-sources.json
+    # Move catalogs out of share/locale so flatpak's per-language .Locale
+    # extension doesn't strip the locales the in-app language picker offers.
+    post-install:
+      - mkdir -p ${FLATPAK_DEST}/share/karere
+      - mv ${FLATPAK_DEST}/share/locale ${FLATPAK_DEST}/share/karere/locale
