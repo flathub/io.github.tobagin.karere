@@ -1,6 +1,6 @@
 app-id: io.github.tobagin.karere
 runtime: org.gnome.Platform
-runtime-version: '50'
+runtime-version: '51'
 sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -76,8 +76,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/tobagin/karere
-        tag: v4.3.0
-        commit: c8b3d71833d6b858f58b73f715aefec63ed98d14
+        tag: v4.3.2
+        commit: 11dfc0e62d7279e5dd3b2e97dc096e521845dedb
       - cargo-sources.json
     post-install:
       - mkdir -p ${FLATPAK_DEST}/share/karere
